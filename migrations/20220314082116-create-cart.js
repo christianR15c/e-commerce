@@ -4,6 +4,7 @@ module.exports = {
     await queryInterface.createTable('Carts', {
       id: {
         allowNull: false,
+        primaryKey: true,
         autoIncrement: true,
         type: Sequelize.INTEGER,
       },
@@ -17,7 +18,6 @@ module.exports = {
         },
       },
       productId: {
-        primaryKey: true,
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
@@ -25,6 +25,9 @@ module.exports = {
           key: 'id',
           as: 'productId',
         },
+      },
+      price: {
+        type: Sequelize.INTEGER,
       },
       quantity: {
         type: Sequelize.INTEGER,

@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
           as: 'productId',
         },
       },
+      price: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,
       subtotal: DataTypes.INTEGER,
     },
