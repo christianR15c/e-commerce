@@ -16,6 +16,7 @@ import productRouter from './routes/product';
 import cartRouter from './routes/cart';
 import categoryRouter from './routes/category';
 import checkoutRouter from './routes/checkout';
+import orderRouter from './routes/order';
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use(productRouter);
 app.use(cartRouter);
 app.use(categoryRouter);
 app.use(checkoutRouter);
+app.use(orderRouter);
 
 // Listening to requests
 app.listen(port, async () => {

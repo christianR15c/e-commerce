@@ -20,26 +20,24 @@ const createCategory = (req, res) => {
 };
 
 const getAllCategories = (req, res) => {
-  return Category.findAll().then((categories) => {
+  Category.findAll().then((categories) => {
     res.status(200).json(categories);
   });
 };
 
 const getSingleCategory = (req, res) => {
-  return Category.findByPk(req.params.categoryId)
+  Category.findByPk(req.params.categoryId)
     .then((category) => {
-      if (category) {
-        res.status(200).json(category);
-      } else {
-        res.status(400).json({ message: `category not found` });
-      }
+      category
+        ? res.status(200).json(category)
+        : res.status(400).json({ message: `category not found` });
     })
     .catch((error) => console.log(error));
 };
 
 const updateCategory = (req, res) => {
   const { categoryName } = req.body;
-  return Category.findByPk(req.params.categoryId)
+  Category.findByPk(req.params.categoryId)
     .then((category) => {
       category
         .update({
@@ -59,22 +57,20 @@ const updateCategory = (req, res) => {
 };
 
 const deleteCategory = (req, res) => {
-  return Category.findByPk(req.params.categoryId)
+  Category.findByPk(req.params.categoryId)
     .then((category) => {
-      if (!category) {
-        return res.status(400).json({
-          message: `category not found`,
-        });
-      } else {
-        return category
-          .destroy()
-          .then(() =>
-            res.status(200).json({
-              message: `category deleted successfully`,
-            })
-          )
-          .catch((error) => res.status(400).json(error));
-      }
+      !category
+        ? res.status(400).json({
+            message: `category not found`,
+          })
+        : category
+            .destroy()
+            .then(() =>
+              res.status(200).json({
+                message: `category deleted successfully`,
+              })
+            )
+            .catch((error) => res.status(400).json(error));
     })
     .catch((error) => res.status(400).json(error));
 };

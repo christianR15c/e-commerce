@@ -50,7 +50,7 @@ const getSingleProduct = (req, res) => {
 
 const updateProduct = (req, res) => {
   const { productName, description, quantity, price } = req.body;
-  return Product.findByPk(req.params.productId)
+  Product.findByPk(req.params.productId)
     .then((productToUpdate) => {
       Product.findAll({
         where: { productName },
@@ -119,30 +119,3 @@ export default {
   deleteProduct,
   findProductByCategory,
 };
-
-//uploading image
-/*
- //imports
- import multer from 'multer';
-import { path } from 'express/lib/application';
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, '../../images');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
-  },
-});
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    const fileTypes = /jpeg|jpg|png|gif/;
-    const mimeType = fileTypes.test(file.mimetype);
-    const extname = fileTypes.test(path.extname(file.originalname));
-
-    if (mimeType && extname) cb(null, true);
-    else cb('upload proper file format');
-  },
-}).single('image');
-*/

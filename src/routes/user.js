@@ -1,13 +1,14 @@
 import express from 'express';
 import users from '../controllers/userController';
+import verifyAdmin from '../middleware/verifyAdmin';
 import verifyUser from '../middleware/verifyUser';
 
 const router = express.Router();
 
 router.post('/api/register', users.register);
-router.get('/api/users', users.getAllUsers);
+router.get('/api/users', verifyAdmin, users.getAllUsers);
 router.get('/api/users/:userId', users.getSingleUser);
-router.delete('/api/users/:userId', users.deleteUser);
+router.delete('/api/users/:userId', verifyAdmin, users.deleteUser);
 router.patch('/api/users/:userId', verifyUser, users.updateUser);
 
 export default router;
@@ -58,6 +59,10 @@ export default router;
  *       - User
  *     summary: This api is used to get all users registred
  *     description: get all users registered
+ *     parameters:
+ *       - name: token
+ *         in: header
+ *         required: true
  *     responses:
  *         200:
  *             description: To get all users from database
@@ -89,8 +94,8 @@ export default router;
 // edit a user
 /**
  * @swagger
- * /api/role/{id}:
- *  put:
+ * /api/users/{id}:
+ *  patch:
  *   tags:
  *    - User
  *   summary: this api used to update a user
@@ -100,7 +105,7 @@ export default router;
  *   produces:
  *    - application/json
  *   parameters:
- *    - name: authorization
+ *    - name: token
  *      in: header
  *      required: true
  *    - in: path
@@ -123,4 +128,28 @@ export default router;
  *     description: success
  *     content:
  *      application/json
+ */
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     tags:
+ *       - User
+ *     summary: delete a user
+ *     description: Deletes a single user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: token
+ *         in: header
+ *         required: true
+ *       - name: id
+ *         description: user's id
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Successfully deleted
  */

@@ -6,12 +6,10 @@ const { Cart } = model;
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-// stripe(process.env.STRIPE_SECRET_KEY);
-
 const checkout = async (req, res) => {
   // geting information of products on cart
-  const urlCart = `${process.env.SERVER_URL}/api/product/oncart/1`;
-  const urlProducts = `${process.env.SERVER_URL}/api/product`;
+  const { cartId } = req.params;
+  const urlCart = `${process.env.SERVER_URL}/api/product/oncart/${cartId}`;
   async function getCartsData(urlCart) {
     const response = await fetch(urlCart);
 
@@ -19,7 +17,7 @@ const checkout = async (req, res) => {
   }
 
   const cartData = await getCartsData(urlCart);
-  if (cartData.products.length != 0) {
+  if (cartData.products) {
     // stripe configuration
     stripe.checkout.sessions
       .create({
@@ -40,7 +38,7 @@ const checkout = async (req, res) => {
         success_url: `${process.env.SERVER_URL}/success.html`,
         cancel_url: `${process.env.SERVER_URL}/cancel.html`,
       })
-      .then((session) => res.status(200).json({ url: session.url, session }))
+      .then((session) => res.status(200).json({ url: session.url }))
       .catch((error) => res.status(500).json({ error: error.message }));
   } else res.status(500).json({ message: 'there is no cart' });
 };

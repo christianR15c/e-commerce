@@ -1,23 +1,33 @@
 import model from '../../models';
+import user from '../../models/user';
 
 const { User } = model;
 
 const register = (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, isAdmin } = req.body;
 
-  User.findOne({ where: { email } }).then((user) => {
+  User.findOne({
+    where: { email },
+    attributes: {
+      exclude: ['password'],
+    },
+  }).then((user) => {
     user
       ? res.status(400).json({ message: 'user already exist' })
       : User.create({
           name,
           email,
           password,
+          isAdmin,
         })
           .then((userData) =>
             res.status(200).json({
               success: true,
               message: 'User successfully created',
-              userData,
+              user: {
+                name: userData.name,
+                email: userData.email,
+              },
             })
           )
           .catch((err) => {
@@ -27,8 +37,16 @@ const register = (req, res) => {
 };
 
 const getAllUsers = (req, res) => {
-  return User.findAll().then((users) => {
-    res.status(200).json(users);
+  return User.findAll({
+    attributes: {
+      exclude: ['password'],
+    },
+  }).then((users) => {
+    users.length === 0
+      ? res.status(500).json({ message: 'No user saved in database' })
+      : res.status(200).json({
+          users,
+        });
   });
 };
 
@@ -38,7 +56,7 @@ const getSingleUser = (req, res) => {
       if (user) {
         res.status(200).json(user);
       } else {
-        res.status(400).json({ message: `$User not found` });
+        res.status(400).json({ message: `User not found` });
       }
     })
     .catch((error) => console.log(error));
