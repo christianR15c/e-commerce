@@ -13,10 +13,16 @@ if (config.url) {
   sequelize = new Sequelize(config.url, config);
 } else {
   sequelize = new Sequelize(
-    config.database,
-    config.username,
+    config.user,
     config.password,
-    config
+    config.database,
+    config.port,
+    config.host,
+    config.ssl,
+    config.dialect,
+    (dialectOptions = {
+      ssl: true,
+    })
   );
 }
 
