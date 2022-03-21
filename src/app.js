@@ -6,6 +6,7 @@ import swaggerUI from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const app = express();
 
 app.use(logger('combined'));
 app.use(cookieParser());
+app.use(cors());
 
 // static folder
 app.use('/images', express.static('../images'));
