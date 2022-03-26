@@ -10,7 +10,7 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    url: process.env.DB_PRODUCTION,
+    url: process.env.DATABASE_URL,
     dialect: 'postgres',
     ssl: {
       require: true,
