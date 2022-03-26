@@ -5,17 +5,22 @@ const { Category } = model;
 const createCategory = (req, res) => {
   const { categoryName } = req.body;
 
-  Category.create({
-    categoryName,
+  Category.findOrCreate({
+    where: { categoryName },
   })
-    .then((category) => {
-      res.status(200).json({
-        message: 'category successfully created',
-        category,
-      });
+    .then(([categoryName, created]) => {
+      created
+        ? res.json({
+            message: 'category successfully created',
+            categoryName,
+          })
+        : res.json({
+            message: 'category already exist',
+            categoryName,
+          });
     })
     .catch((err) => {
-      res.status(500).json({ error: err.message });
+      res.status(400).json({ error: err.message });
     });
 };
 
