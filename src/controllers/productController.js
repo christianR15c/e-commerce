@@ -5,7 +5,7 @@ const { Product } = model;
 const createProduct = (req, res) => {
   const { productName, description, quantity, price } = req.body;
   Product.findAll({
-    where: { productName },
+    where: { productName, categoryId: req.params.categoryId },
   }).then((product) => {
     product.length != 0
       ? res
